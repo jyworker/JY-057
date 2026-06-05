@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hugmom.back.mapper.MemorialMessageMapper">
+
+    <!-- 结果映射 -->
+    <resultMap id="BaseResultMap" type="com.hugmom.back.entity.MemorialMessage">
+        <id column="id" property="id"/>
+        <result column="message_id" property="messageId"/>
+        <result column="user_id" property="userId"/>
+        <result column="member_id" property="memberId"/>
+        <result column="content" property="content"/>
+        <result column="photos" property="photos"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 基础列 -->
+    <sql id="Base_Column_List">
+        id, message_id, user_id, member_id, content, photos, create_time, update_time
+    </sql>
+
+    <!-- 插入纪念留言 -->
+    <insert id="insert" parameterType="com.hugmom.back.entity.MemorialMessage">
+        INSERT INTO hm_memorial_message (
+            message_id, user_id, member_id, content, photos, create_time, update_time
+        ) VALUES (
+            #{messageId}, #{userId}, #{memberId}, #{content}, #{photos}, NOW(), NOW()
+        )
+    </insert>
+
+    <!-- 根据成员ID查询留言列表 -->
+    <select id="selectByMemberId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM hm_memorial_message
+        WHERE member_id = #{memberId}
+        ORDER BY create_time DESC
+    </select>
+
+    <!-- 根据留言ID查询留言 -->
+    <select id="selectByMessageId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM hm_memorial_message
+        WHERE message_id = #{messageId}
+    </select>
+
+    <!-- 删除留言 -->
+    <delete id="deleteByMessageId">
+        DELETE FROM hm_memorial_message
+        WHERE message_id = #{messageId}
+    </delete>
+
+</mapper>

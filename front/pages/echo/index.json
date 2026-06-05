@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "爱的回响",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "van-button": "@vant/weapp/button/index",
+    "van-loading": "@vant/weapp/loading/index",
+    "van-toast": "@vant/weapp/toast/index"
+  }
+}

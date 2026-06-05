@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hugmom.back.mapper.AnnualReportMapper">
+
+    <!-- 结果映射 -->
+    <resultMap id="BaseResultMap" type="com.hugmom.back.entity.AnnualReport">
+        <id column="id" property="id"/>
+        <result column="report_id" property="reportId"/>
+        <result column="user_id" property="userId"/>
+        <result column="year" property="year"/>
+        <result column="total_hugs" property="totalHugs"/>
+        <result column="total_safety_messages" property="totalSafetyMessages"/>
+        <result column="total_distance" property="totalDistance"/>
+        <result column="warm_days" property="warmDays"/>
+        <result column="most_active_month" property="mostActiveMonth"/>
+        <result column="favorite_message" property="favoriteMessage"/>
+        <result column="member_stats" property="memberStats"/>
+        <result column="milestones" property="milestones"/>
+        <result column="public_welfare_contribution" property="publicWelfareContribution"/>
+        <result column="helped_families_count" property="helpedFamiliesCount"/>
+        <result column="generate_time" property="generateTime"/>
+        <result column="share_poster_url" property="sharePosterUrl"/>
+        <result column="share_code" property="shareCode"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 基础列 -->
+    <sql id="Base_Column_List">
+        id, report_id, user_id, year, total_hugs, total_safety_messages, total_distance,
+        warm_days, most_active_month, favorite_message, member_stats, milestones,
+        public_welfare_contribution, helped_families_count, generate_time,
+        share_poster_url, share_code, create_time, update_time
+    </sql>
+
+    <!-- 插入年度报告 -->
+    <insert id="insert" parameterType="com.hugmom.back.entity.AnnualReport">
+        INSERT INTO hm_annual_report (
+            report_id, user_id, year, total_hugs, total_safety_messages, total_distance,
+            warm_days, most_active_month, favorite_message, member_stats, milestones,
+            public_welfare_contribution, helped_families_count, generate_time,
+            create_time, update_time
+        ) VALUES (
+            #{reportId}, #{userId}, #{year}, #{totalHugs}, #{totalSafetyMessages},
+            #{totalDistance}, #{warmDays}, #{mostActiveMonth}, #{favoriteMessage},
+            #{memberStats}, #{milestones}, #{publicWelfareContribution},
+            #{helpedFamiliesCount}, #{generateTime}, NOW(), NOW()
+        )
+    </insert>
+
+    <!-- 根据用户ID和年份查询报告 -->
+    <select id="selectByUserIdAndYear" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM hm_annual_report
+        WHERE user_id = #{userId} AND year = #{year}
+    </select>
+
+    <!-- 根据报告ID查询 -->
+    <select id="selectByReportId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM hm_annual_report
+        WHERE report_id = #{reportId}
+    </select>
+
+    <!-- 根据用户ID查询所有报告（按年份降序） -->
+    <select id="selectByUserId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM hm_annual_report
+        WHERE user_id = #{userId}
+        ORDER BY year DESC
+    </select>
+
+    <!-- 更新分享信息 -->
+    <update id="updateShareInfo">
+        UPDATE hm_annual_report
+        SET share_poster_url = #{posterUrl}, share_code = #{shareCode}
+        WHERE report_id = #{reportId}
+    </update>
+
+</mapper>

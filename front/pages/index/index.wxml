@@ -1,0 +1,87 @@
+<!--首页 - 家庭成员列表-->
+<view class="index-container">
+  <!-- 顶部问候 -->
+  <view class="greeting-section fade-in">
+    <text class="greeting-text">{{greeting}}！</text>
+    <text class="greeting-desc">今天要给谁送个拥抱呢？</text>
+  </view>
+
+  <!-- 核心功能入口 -->
+  <view class="feature-grid">
+    <view class="feature-card" bindtap="handleFeatureTap" data-feature="hug">
+      <view class="feature-icon hug-icon">🫂</view>
+      <text class="feature-name">虚拟拥抱</text>
+      <text class="feature-desc">隔空相拥</text>
+    </view>
+    
+    <view class="feature-card" bindtap="handleFeatureTap" data-feature="safety">
+      <view class="feature-icon safety-icon">🕊️</view>
+      <text class="feature-name">报平安</text>
+      <text class="feature-desc">平安即抵达</text>
+    </view>
+    
+    <view class="feature-card" bindtap="handleFeatureTap" data-feature="memorial">
+      <view class="feature-icon memorial-icon">🕯️</view>
+      <text class="feature-name">纪念空间</text>
+      <text class="feature-desc">思念有光</text>
+    </view>
+    
+    <view class="feature-card" bindtap="navigateTo" data-url="/pages/echo/index">
+      <view class="feature-icon echo-icon">💝</view>
+      <text class="feature-name">爱的回响</text>
+      <text class="feature-desc">双向温暖</text>
+    </view>
+  </view>
+
+  <!-- 加载状态 -->
+  <view wx:if="{{loading}}" class="loading-section">
+    <van-loading type="spinner" color="#ff6a88" />
+  </view>
+
+  <!-- 家庭成员列表 -->
+  <view wx:else class="members-section">
+    <view class="section-header">
+      <text class="section-title">家庭成员</text>
+      <view class="add-member-btn" bindtap="handleAddMember">
+        <text class="add-icon">+</text>
+        <text class="add-text">添加成员</text>
+      </view>
+    </view>
+
+    <view class="members-list">
+      <view 
+        wx:for="{{members}}" 
+        wx:key="memberId"
+        class="member-item fade-in"
+      >
+        <view class="member-avatar-small">
+          <text class="avatar-text">{{item.nickname ? item.nickname.charAt(0) : item.name.charAt(0)}}</text>
+          <!-- 已故标识 -->
+          <view wx:if="{{item.status === 'deceased'}}" class="status-dot deceased"></view>
+          <view wx:else class="status-dot alive"></view>
+        </view>
+
+        <view class="member-text">
+          <text class="member-name-text">{{item.name}}</text>
+          <text class="member-nickname-text">{{item.nickname}}</text>
+        </view>
+
+        <!-- 删除按钮 -->
+        <view 
+          class="delete-btn"
+          catchtap="handleDeleteTap"
+          data-member="{{item}}"
+        >
+          <text class="delete-icon">🗑️</text>
+        </view>
+      </view>
+
+      <!-- 空状态 -->
+      <view wx:if="{{members.length === 0}}" class="empty-state">
+        <text class="empty-icon">👨‍👩‍👧‍👦</text>
+        <text class="empty-text">还没有添加家庭成员</text>
+        <text class="empty-hint">点击上方按钮添加您的家人</text>
+      </view>
+    </view>
+  </view>
+</view>

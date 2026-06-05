@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hugmom.back.mapper.FamilyMemberMapper">
+
+    <!-- 结果映射 -->
+    <resultMap id="BaseResultMap" type="com.hugmom.back.entity.FamilyMember">
+        <id column="id" property="id"/>
+        <result column="member_id" property="memberId"/>
+        <result column="user_id" property="userId"/>
+        <result column="name" property="name"/>
+        <result column="nickname" property="nickname"/>
+        <result column="status" property="status"/>
+        <result column="photo_hash" property="photoHash"/>
+        <result column="last_hug_time" property="lastHugTime"/>
+        <result column="relationship" property="relationship"/>
+        <result column="birthday" property="birthday"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 基础列 -->
+    <sql id="Base_Column_List">
+        id, member_id, user_id, name, nickname, status, photo_hash,
+        last_hug_time, relationship, birthday, create_time, update_time
+    </sql>
+
+    <!-- 根据用户ID查询所有家庭成员 -->
+    <select id="selectByUserId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM hm_family_member
+        WHERE user_id = #{userId}
+        ORDER BY create_time DESC
+    </select>
+
+    <!-- 根据成员ID查询成员 -->
+    <select id="selectByMemberId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM hm_family_member
+        WHERE member_id = #{memberId}
+    </select>
+
+    <!-- 插入家庭成员 -->
+    <insert id="insert" parameterType="com.hugmom.back.entity.FamilyMember">
+        INSERT INTO hm_family_member (
+            member_id, user_id, name, nickname, status, photo_hash,
+            relationship, birthday, create_time, update_time
+        ) VALUES (
+            #{memberId}, #{userId}, #{name}, #{nickname}, #{status}, #{photoHash},
+            #{relationship}, #{birthday}, NOW(), NOW()
+        )
+    </insert>
+
+    <!-- 更新家庭成员信息 -->
+    <update id="updateByMemberId" parameterType="com.hugmom.back.entity.FamilyMember">
+        UPDATE hm_family_member
+        <set>
+            <if test="name != null">name = #{name},</if>
+            <if test="nickname != null">nickname = #{nickname},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="photoHash != null">photo_hash = #{photoHash},</if>
+            <if test="relationship != null">relationship = #{relationship},</if>
+            <if test="birthday != null">birthday = #{birthday},</if>
+            update_time = NOW()
+        </set>
+        WHERE member_id = #{memberId}
+    </update>
+
+    <!-- 更新最后拥抱时间 -->
+    <update id="updateLastHugTime">
+        UPDATE hm_family_member
+        SET last_hug_time = NOW(),
+            update_time = NOW()
+        WHERE member_id = #{memberId}
+    </update>
+
+    <!-- 删除家庭成员 -->
+    <delete id="deleteByMemberId">
+        DELETE FROM hm_family_member
+        WHERE member_id = #{memberId}
+    </delete>
+
+</mapper>

@@ -1,0 +1,23 @@
+{
+  "name": "hug-mom-miniprogram",
+  "version": "1.0.0",
+  "description": "拥抱妈妈·爱在平安微信小程序",
+  "main": "app.js",
+  "scripts": {
+    "dev": "npm run compile",
+    "compile": "tsc",
+    "build": "tsc"
+  },
+  "keywords": ["wechat", "miniprogram", "AI向善"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@vant/weapp": "^1.11.5",
+    "three-platformize": "^1.133.3"
+  },
+  "devDependencies": {
+    "@types/wechat-miniprogram": "^3.4.7",
+    "miniprogram-api-typings": "^3.12.2",
+    "typescript": "^5.3.3"
+  }
+}

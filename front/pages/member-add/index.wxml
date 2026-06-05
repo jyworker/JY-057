@@ -1,0 +1,67 @@
+<!--添加家庭成员页面-->
+<view class="member-add-container">
+  <view class="form-section">
+    <van-cell-group inset>
+      <van-field
+        value="{{ form.name }}"
+        label="姓名"
+        placeholder="请输入真实姓名"
+        required
+        border="{{ true }}"
+        bind:input="onFieldChange"
+        data-field="name"
+      />
+      <van-field
+        value="{{ form.nickname }}"
+        label="昵称"
+        placeholder="如：妈妈、爷爷"
+        border="{{ true }}"
+        bind:input="onFieldChange"
+        data-field="nickname"
+      />
+      <van-field
+        value="{{ form.relationship }}"
+        label="关系"
+        placeholder="如：母亲、父亲"
+        border="{{ true }}"
+        bind:input="onFieldChange"
+        data-field="relationship"
+      />
+    </van-cell-group>
+
+    <!-- 成员状态 -->
+    <view class="status-section">
+      <text class="status-label">成员状态</text>
+      <view class="status-options">
+        <view
+          class="status-option {{ form.status === 'alive' ? 'active' : '' }}"
+          data-status="alive"
+          bindtap="onStatusTap"
+        >
+          <text>健在</text>
+        </view>
+        <view
+          class="status-option {{ form.status === 'deceased' ? 'active' : '' }}"
+          data-status="deceased"
+          bindtap="onStatusTap"
+        >
+          <text>纪念</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="submit-section">
+    <van-button
+      type="primary"
+      block
+      round
+      loading="{{ submitting }}"
+      loading-text="提交中..."
+      bind:click="handleSubmit"
+      custom-class="submit-btn"
+    >
+      保存
+    </van-button>
+  </view>
+</view>

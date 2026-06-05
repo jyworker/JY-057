@@ -1,0 +1,388 @@
+.welfare-container {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f0f8f0 0%, #f8f8f8 100%);
+}
+
+/* 页面头部 */
+.welfare-header {
+  background: linear-gradient(135deg, #66bb6a 0%, #43a047 100%);
+  padding: 40px 20px 30px;
+  text-align: center;
+  border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 24px;
+}
+
+.header-title {
+  display: block;
+  font-size: 28px;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.header-subtitle {
+  display: block;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* 加载状态 */
+.loading-section,
+.loading-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 0;
+}
+
+/* 内容区域 */
+.welfare-content {
+  padding: 20px;
+  padding-bottom: 40px;
+}
+
+/* 章节标题 */
+.section-title {
+  display: block;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 16px;
+}
+
+.section-desc {
+  display: block;
+  font-size: 13px;
+  color: #999;
+  margin-bottom: 12px;
+}
+
+/* 平台统计 */
+.stats-section {
+  margin-bottom: 24px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.stat-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px 16px;
+  text-align: center;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-card.primary {
+  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+  border: 2px solid #66bb6a;
+}
+
+.stat-icon {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: bold;
+  color: #43a047;
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  font-size: 13px;
+  color: #666;
+}
+
+/* 实时数据 */
+.realtime-box {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.realtime-text {
+  font-size: 14px;
+  color: #666;
+  margin-right: 8px;
+}
+
+.realtime-count {
+  font-size: 20px;
+  font-weight: bold;
+  color: #ff6a88;
+  margin: 0 4px;
+}
+
+.realtime-unit {
+  font-size: 14px;
+  color: #999;
+}
+
+/* 里程碑 */
+.milestone-section {
+  margin-bottom: 24px;
+}
+
+.milestone-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.milestone-item {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  align-items: flex-start;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  opacity: 0.6;
+}
+
+.milestone-item.reached {
+  opacity: 1;
+  border-left: 4px solid #66bb6a;
+}
+
+.milestone-icon {
+  font-size: 24px;
+  margin-right: 12px;
+}
+
+.milestone-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.milestone-value {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.milestone-desc {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.milestone-date {
+  font-size: 12px;
+  color: #999;
+}
+
+/* 我的贡献 */
+.contribution-section {
+  margin-bottom: 24px;
+}
+
+.contribution-card {
+  background: linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%);
+  border-radius: 16px;
+  padding: 24px;
+  border: 2px solid #ff6a88;
+}
+
+.contribution-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.contribution-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.contribution-stats {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.contribution-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.contribution-label {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.contribution-value {
+  font-size: 20px;
+  font-weight: bold;
+  color: #ff6a88;
+}
+
+/* 成就徽章 */
+.achievements {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 16px;
+}
+
+.achievements-title {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 12px;
+}
+
+.badges-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.badge-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px;
+  background: #f8f8f8;
+  border-radius: 8px;
+  min-width: 70px;
+}
+
+.badge-icon {
+  font-size: 32px;
+  margin-bottom: 4px;
+}
+
+.badge-name {
+  font-size: 12px;
+  color: #666;
+  text-align: center;
+}
+
+/* 公益故事 */
+.stories-section {
+  margin-bottom: 24px;
+}
+
+.stories-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.story-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.story-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.story-location {
+  font-size: 14px;
+  color: #666;
+}
+
+.story-date {
+  font-size: 12px;
+  color: #999;
+}
+
+.story-content {
+  display: block;
+  font-size: 15px;
+  color: #333;
+  line-height: 1.8;
+  margin-bottom: 12px;
+}
+
+.story-footer {
+  text-align: right;
+}
+
+.story-author {
+  font-size: 13px;
+  color: #999;
+  font-style: italic;
+}
+
+/* 加载更多 */
+.load-more {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.load-more-text {
+  font-size: 14px;
+  color: #999;
+}
+
+/* 空状态 */
+.empty-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60px 20px;
+  background: #fff;
+  border-radius: 16px;
+}
+
+.empty-text {
+  font-size: 14px;
+  color: #999;
+}
+
+/* 向善理念 */
+.philosophy-section {
+  background: linear-gradient(135deg, #fff 0%, #fffbf8 100%);
+  border-radius: 16px;
+  padding: 32px 24px;
+  text-align: center;
+  border: 2px solid #ffebee;
+  margin-top: 24px;
+}
+
+.philosophy-title {
+  display: block;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 16px;
+}
+
+.philosophy-text {
+  display: block;
+  font-size: 14px;
+  color: #666;
+  line-height: 1.8;
+  text-align: justify;
+  margin-bottom: 16px;
+}
+
+.philosophy-footer {
+  display: block;
+  font-size: 15px;
+  font-weight: 500;
+  color: #ff6a88;
+}

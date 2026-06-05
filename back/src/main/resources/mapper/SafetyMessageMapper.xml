@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hugmom.back.mapper.SafetyMessageMapper">
+
+    <!-- 结果映射 -->
+    <resultMap id="BaseResultMap" type="com.hugmom.back.entity.SafetyMessage">
+        <id column="id" property="id"/>
+        <result column="message_id" property="messageId"/>
+        <result column="user_id" property="userId"/>
+        <result column="member_id" property="memberId"/>
+        <result column="content" property="content"/>
+        <result column="send_time" property="sendTime"/>
+        <result column="is_scheduled" property="isScheduled"/>
+        <result column="scheduled_time" property="scheduledTime"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 基础列 -->
+    <sql id="Base_Column_List">
+        id, message_id, user_id, member_id, content, send_time,
+        is_scheduled, scheduled_time, status, create_time, update_time
+    </sql>
+
+    <!-- 插入报平安消息 -->
+    <insert id="insert" parameterType="com.hugmom.back.entity.SafetyMessage">
+        INSERT INTO hm_safety_message (
+            message_id, user_id, member_id, content, send_time,
+            is_scheduled, scheduled_time, status, create_time, update_time
+        ) VALUES (
+            #{messageId}, #{userId}, #{memberId}, #{content}, #{sendTime},
+            #{isScheduled}, #{scheduledTime}, #{status}, NOW(), NOW()
+        )
+    </insert>
+
+    <!-- 根据成员ID查询消息历史 -->
+    <select id="selectByMemberId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM hm_safety_message
+        WHERE member_id = #{memberId}
+        ORDER BY send_time DESC
+        LIMIT 100
+    </select>
+
+    <!-- 根据消息ID查询消息 -->
+    <select id="selectByMessageId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM hm_safety_message
+        WHERE message_id = #{messageId}
+    </select>
+
+    <!-- 更新消息状态 -->
+    <update id="updateStatus">
+        UPDATE hm_safety_message
+        SET status = #{status},
+            update_time = NOW()
+        WHERE message_id = #{messageId}
+    </update>
+
+    <!-- 删除消息（取消定时消息） -->
+    <delete id="deleteByMessageId">
+        DELETE FROM hm_safety_message
+        WHERE message_id = #{messageId}
+    </delete>
+
+</mapper>

@@ -1,0 +1,79 @@
+<!--纪念空间页面-->
+<view class="memorial-container memorial-mode">
+  <!-- 顶部成员信息 -->
+  <view class="memorial-header fade-in">
+    <view class="header-photo">
+      <image 
+        src="/assets/avatars/{{member.photoHash}}.jpg" 
+        mode="aspectFill"
+        class="photo-img"
+      ></image>
+    </view>
+    <text class="member-name">{{member.name}}</text>
+    <text class="member-dates">永远怀念</text>
+  </view>
+
+  <!-- 功能区 -->
+  <view class="memorial-actions fade-in">
+    <view class="action-item" bindtap="handleViewPhotos">
+      <view class="action-icon">📷</view>
+      <text class="action-text">查看老照片</text>
+    </view>
+
+    <view class="action-item" bindtap="showMessageInput">
+      <view class="action-icon">✍️</view>
+      <text class="action-text">写留言</text>
+    </view>
+
+    <!-- 禁用功能示例 -->
+    <view class="action-item disabled" bindtap="handleBlockedFeature">
+      <view class="action-icon">🎥</view>
+      <text class="action-text">视频生成</text>
+      <text class="disabled-tag">不可用</text>
+    </view>
+  </view>
+
+  <!-- 留言列表 -->
+  <view class="messages-section">
+    <view class="section-title">留言板</view>
+    
+    <view wx:if="{{messages.length > 0}}" class="messages-list">
+      <view 
+        wx:for="{{messages}}" 
+        wx:key="messageId"
+        class="message-item fade-in"
+      >
+        <text class="message-time">{{item.createTime}}</text>
+        <text class="message-content">{{item.content}}</text>
+      </view>
+    </view>
+
+    <view wx:else class="empty-messages">
+      <text class="empty-text">还没有留言，写下你想说的话吧</text>
+    </view>
+  </view>
+
+  <!-- 底部静默守护文案 -->
+  <view class="memorial-footer memorial-text">
+    <text class="footer-text">思念无需喧嚣，爱在静默中长存</text>
+  </view>
+
+  <!-- 留言输入弹窗 -->
+  <van-dialog
+    show="{{ showMessageInput }}"
+    title="写下你的思念"
+    show-cancel-button
+    bind:close="hideMessageInput"
+    bind:confirm="handleSubmitMessage"
+  >
+    <van-field
+      value="{{ messageContent }}"
+      type="textarea"
+      placeholder="想对TA说些什么..."
+      autosize
+      maxlength="500"
+      show-word-limit
+      bind:change="handleMessageInput"
+    />
+  </van-dialog>
+</view>

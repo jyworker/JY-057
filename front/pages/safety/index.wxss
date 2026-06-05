@@ -1,0 +1,155 @@
+.safety-container {
+  min-height: 100vh;
+  background: #f8f8f8;
+  padding: 20px;
+  padding-bottom: 120px; /* 为底部按钮留空间 */
+  box-sizing: border-box;
+}
+
+/* 顶部成员信息 */
+.safety-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 16px;
+  background: #fff;
+  border-radius: 12px;
+}
+
+.member-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 12px;
+}
+
+.header-text {
+  font-size: 18px;
+  font-weight: 500;
+  color: #333;
+}
+
+/* 消息输入区 */
+.message-input-section {
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.message-textarea {
+  width: 100%;
+  min-height: 150px;
+  padding: 16px;
+  box-sizing: border-box;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #333;
+}
+
+.highlight-preview {
+  padding: 16px;
+  border-top: 1px solid #f0f0f0;
+  background: #fafafa;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #333;
+}
+
+.word-count {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+}
+
+.count-text {
+  font-size: 12px;
+  color: #ccc;
+}
+
+/* 快捷短语 */
+.quick-phrases {
+  margin-bottom: 16px;
+}
+
+.section-title {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #666;
+  margin-bottom: 12px;
+}
+
+.phrases-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.phrase-tag {
+  background: #f0f0f0;
+  padding: 8px 16px;
+  border-radius: 16px;
+  transition: background 0.2s;
+}
+
+.phrase-tag:active {
+  background: #e0e0e0;
+}
+
+.phrase-text {
+  font-size: 14px;
+  color: #666;
+}
+
+/* 定时发送设置 */
+.schedule-section {
+  margin-bottom: 16px;
+}
+
+.schedule-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.time-picker-section {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  background: #f8f8f8;
+  border-radius: 8px;
+}
+
+.picker-label {
+  font-size: 14px;
+  color: #666;
+  margin-right: 12px;
+}
+
+.picker-value {
+  font-size: 16px;
+  color: #333;
+  font-weight: 500;
+}
+
+/* 底部操作按钮 */
+.bottom-actions {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px 20px;
+  background: #fff;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.08);
+  display: flex;
+  gap: 12px;
+}
+
+.voice-button {
+  flex: 1;
+}
+
+.send-button {
+  flex: 2;
+  background: linear-gradient(135deg, #ff9a56 0%, #ff6a88 100%);
+}

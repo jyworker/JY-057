@@ -1,0 +1,101 @@
+<!-- 年度报告详情页 -->
+<view class="report-container">
+  <view wx:if="{{loading}}" class="loading-section">
+    <van-loading type="spinner" color="#ff6a88" size="40px" />
+    <text class="loading-text">正在加载报告...</text>
+  </view>
+
+  <view wx:else class="report-content">
+    <!-- 报告封面 -->
+    <view class="report-cover">
+      <text class="cover-year">{{report.year}}</text>
+      <text class="cover-title">年度爱的报告</text>
+      <text class="cover-subtitle">AI传递爱 · 平安即抵达</text>
+      <text class="cover-date">生成时间：{{report.generateTime}}</text>
+    </view>
+
+    <!-- 数据摘要 -->
+    <view class="summary-section">
+      <text class="section-title">📊 数据摘要</text>
+      <view class="summary-grid">
+        <view class="summary-item">
+          <text class="summary-value">{{report.summary.totalHugs}}</text>
+          <text class="summary-label">次拥抱</text>
+          <text class="summary-desc">送出的温暖</text>
+        </view>
+        <view class="summary-item">
+          <text class="summary-value">{{report.summary.totalSafetyMessages}}</text>
+          <text class="summary-label">次报平安</text>
+          <text class="summary-desc">爱的确认</text>
+        </view>
+        <view class="summary-item">
+          <text class="summary-value">{{report.summary.totalDistance}}</text>
+          <text class="summary-label">公里</text>
+          <text class="summary-desc">爱的距离</text>
+        </view>
+        <view class="summary-item">
+          <text class="summary-value">{{report.summary.warmDays}}</text>
+          <text class="summary-label">天</text>
+          <text class="summary-desc">温暖时光</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 最活跃月份 -->
+    <view class="highlight-section">
+      <text class="section-title">🌟 最活跃月份</text>
+      <view class="highlight-card">
+        <text class="highlight-month">{{report.summary.mostActiveMonth}}</text>
+        <text class="highlight-desc">这个月您最关心家人</text>
+      </view>
+    </view>
+
+    <!-- 最喜欢的留言 -->
+    <view class="message-section" wx:if="{{report.summary.favoriteMessage}}">
+      <text class="section-title">💝 最温暖的话</text>
+      <view class="message-card">
+        <text class="message-quote">"</text>
+        <text class="message-text">{{report.summary.favoriteMessage}}</text>
+        <text class="message-quote">"</text>
+      </view>
+    </view>
+
+    <!-- 公益贡献 -->
+    <view class="welfare-section">
+      <text class="section-title">🌱 公益贡献</text>
+      <view class="welfare-card">
+        <text class="welfare-highlight">您的{{report.summary.totalHugs}}次拥抱</text>
+        <text class="welfare-text">为孤寡妈妈储备了</text>
+        <text class="welfare-value">{{welfareContribution}}</text>
+        <text class="welfare-text">份关爱</text>
+        <text class="welfare-footer">让世界更暖 {{welfareContribution}}℃</text>
+      </view>
+    </view>
+
+    <!-- 温暖寄语 -->
+    <view class="blessing-section">
+      <text class="blessing-icon">💌</text>
+      <text class="blessing-text">
+        "{{report.year}}年，您为妈妈发送{{report.summary.totalHugs}}次拥抱，
+        跨越{{report.summary.totalDistance}}公里，温暖了{{report.summary.warmDays}}个日夜。
+        纵使山海相隔，爱在平安；纵使时光流转，爱在当下。"
+      </text>
+    </view>
+
+    <!-- 分享按钮 -->
+    <view class="actions-section">
+      <van-button 
+        type="primary" 
+        round 
+        block 
+        bind:click="handleShare"
+        loading="{{sharing}}"
+      >
+        📤 分享报告
+      </van-button>
+    </view>
+  </view>
+</view>
+
+<!-- Toast提示 -->
+<van-toast id="van-toast" />

@@ -1,0 +1,71 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+spring:
+  application:
+    name: hug-mom-backend
+  
+  # 数据源配置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/hug_mom?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: root
+    password: 123456
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 20
+      auto-commit: true
+      idle-timeout: 30000
+      pool-name: HugMomHikariCP
+      max-lifetime: 1800000
+      connection-timeout: 30000
+  
+  # Jackson配置
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    serialization:
+      write-dates-as-timestamps: false
+
+# MyBatis配置
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.hugmom.back.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    cache-enabled: false
+    lazy-loading-enabled: true
+    aggressive-lazy-loading: false
+
+# 日志配置
+logging:
+  level:
+    com.hugmom.back: debug
+    com.hugmom.back.mapper: debug
+  pattern:
+    console: '%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{50} - %msg%n'
+
+# 微信小程序配置
+wechat:
+  mini:
+    enable: false  # 是否启用真实微信登录（开发环境设为false，生产环境设为true）
+    appid: wxe1423f5c849928c9  # 替换为你的小程序AppID
+    secret: a35e87c412ce6b179fc2a5ed4d36ab42  # 替换为你的小程序AppSecret
+
+# 自定义配置
+hugmom:
+  # 文件上传路径
+  upload:
+    path: /data/hugmom/uploads/
+    max-size: 10485760  # 10MB
+  # Token密钥（至少 32 字符 / 256 位，否则会按 SHA-256 派生）
+  token:
+    secret: hugmom-ai-for-good-2026-secure-key-32bytes
+    expire-time: 604800000  # 7天

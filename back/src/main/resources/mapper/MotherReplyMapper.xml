@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hugmom.back.mapper.MotherReplyMapper">
+
+    <!-- 结果映射 -->
+    <resultMap id="BaseResultMap" type="com.hugmom.back.entity.MotherReply">
+        <id column="id" property="id"/>
+        <result column="reply_id" property="replyId"/>
+        <result column="user_id" property="userId"/>
+        <result column="member_id" property="memberId"/>
+        <result column="original_message_id" property="originalMessageId"/>
+        <result column="original_message_type" property="originalMessageType"/>
+        <result column="reply_type" property="replyType"/>
+        <result column="content" property="content"/>
+        <result column="voice_url" property="voiceUrl"/>
+        <result column="ai_transcript" property="aiTranscript"/>
+        <result column="emotion" property="emotion"/>
+        <result column="is_read" property="isRead"/>
+        <result column="receive_time" property="receiveTime"/>
+        <result column="read_time" property="readTime"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 基础列 -->
+    <sql id="Base_Column_List">
+        id, reply_id, user_id, member_id, original_message_id, original_message_type,
+        reply_type, content, voice_url, ai_transcript, emotion, is_read, receive_time,
+        read_time, create_time, update_time
+    </sql>
+
+    <!-- 插入妈妈回复 -->
+    <insert id="insert" parameterType="com.hugmom.back.entity.MotherReply">
+        INSERT INTO hm_mother_reply (
+            reply_id, user_id, member_id, original_message_id, original_message_type,
+            reply_type, content, voice_url, ai_transcript, emotion, is_read, receive_time,
+            create_time, update_time
+        ) VALUES (
+            #{replyId}, #{userId}, #{memberId}, #{originalMessageId}, #{originalMessageType},
+            #{replyType}, #{content}, #{voiceUrl}, #{aiTranscript}, #{emotion}, #{isRead},
+            #{receiveTime}, NOW(), NOW()
+        )
+    </insert>
+
+    <!-- 根据成员ID查询回复列表 -->
+    <select id="selectByMemberId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM hm_mother_reply
+        WHERE member_id = #{memberId}
+        ORDER BY receive_time DESC
+        LIMIT 100
+    </select>
+
+    <!-- 根据用户ID查询回复列表 -->
+    <select id="selectByUserId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM hm_mother_reply
+        WHERE user_id = #{userId}
+        ORDER BY receive_time DESC
+        LIMIT 100
+    </select>
+
+    <!-- 根据回复ID查询 -->
+    <select id="selectByReplyId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM hm_mother_reply
+        WHERE reply_id = #{replyId}
+    </select>
+
+    <!-- 标记为已读 -->
+    <update id="updateReadStatus">
+        UPDATE hm_mother_reply
+        SET is_read = 1, read_time = NOW()
+        WHERE reply_id = #{replyId}
+    </update>
+
+    <!-- 统计未读回复数量 -->
+    <select id="countUnreadByUserId" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM hm_mother_reply
+        WHERE user_id = #{userId} AND is_read = 0
+    </select>
+
+</mapper>

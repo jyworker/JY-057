@@ -1,0 +1,244 @@
+.report-container {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #fff5f5 0%, #f8f8f8 100%);
+}
+
+/* 加载状态 */
+.loading-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120px 0;
+}
+
+.loading-text {
+  margin-top: 16px;
+  font-size: 14px;
+  color: #999;
+}
+
+/* 报告内容 */
+.report-content {
+  padding: 20px;
+  padding-bottom: 40px;
+}
+
+/* 报告封面 */
+.report-cover {
+  background: linear-gradient(135deg, #ff9a56 0%, #ff6a88 100%);
+  border-radius: 24px;
+  padding: 60px 24px 40px;
+  text-align: center;
+  margin-bottom: 24px;
+  box-shadow: 0 8px 24px rgba(255, 106, 136, 0.3);
+}
+
+.cover-year {
+  display: block;
+  font-size: 48px;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 12px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.cover-title {
+  display: block;
+  font-size: 24px;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.cover-subtitle {
+  display: block;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 24px;
+}
+
+.cover-date {
+  display: block;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* 章节标题 */
+.section-title {
+  display: block;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 16px;
+}
+
+/* 数据摘要 */
+.summary-section {
+  margin-bottom: 24px;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.summary-item {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px 16px;
+  text-align: center;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.summary-value {
+  font-size: 32px;
+  font-weight: bold;
+  background: linear-gradient(135deg, #ff9a56 0%, #ff6a88 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 8px;
+}
+
+.summary-label {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.summary-desc {
+  font-size: 12px;
+  color: #999;
+}
+
+/* 高亮区域 */
+.highlight-section {
+  margin-bottom: 24px;
+}
+
+.highlight-card {
+  background: linear-gradient(135deg, #fff8e1 0%, #ffe8cc 100%);
+  border-radius: 16px;
+  padding: 32px 24px;
+  text-align: center;
+  border: 2px solid #ffa726;
+}
+
+.highlight-month {
+  display: block;
+  font-size: 28px;
+  font-weight: bold;
+  color: #f57c00;
+  margin-bottom: 12px;
+}
+
+.highlight-desc {
+  display: block;
+  font-size: 14px;
+  color: #666;
+}
+
+/* 温暖留言 */
+.message-section {
+  margin-bottom: 24px;
+}
+
+.message-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  position: relative;
+}
+
+.message-quote {
+  font-size: 48px;
+  color: #ffebee;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.message-text {
+  display: block;
+  font-size: 16px;
+  color: #333;
+  line-height: 1.8;
+  padding: 12px 8px;
+  text-align: center;
+}
+
+/* 公益贡献 */
+.welfare-section {
+  margin-bottom: 24px;
+}
+
+.welfare-card {
+  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+  border-radius: 16px;
+  padding: 32px 24px;
+  text-align: center;
+  border: 2px solid #66bb6a;
+}
+
+.welfare-highlight {
+  display: block;
+  font-size: 18px;
+  font-weight: 600;
+  color: #2e7d32;
+  margin-bottom: 12px;
+}
+
+.welfare-text {
+  display: inline;
+  font-size: 14px;
+  color: #666;
+  margin: 0 4px;
+}
+
+.welfare-value {
+  display: inline;
+  font-size: 28px;
+  font-weight: bold;
+  color: #43a047;
+  margin: 0 4px;
+}
+
+.welfare-footer {
+  display: block;
+  font-size: 13px;
+  color: #999;
+  margin-top: 12px;
+}
+
+/* 温暖寄语 */
+.blessing-section {
+  background: #fff;
+  border-radius: 16px;
+  padding: 32px 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  text-align: center;
+}
+
+.blessing-icon {
+  display: block;
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.blessing-text {
+  display: block;
+  font-size: 15px;
+  color: #666;
+  line-height: 1.8;
+  text-align: justify;
+}
+
+/* 操作区域 */
+.actions-section {
+  margin-top: 32px;
+}

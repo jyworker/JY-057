@@ -1,0 +1,98 @@
+<!--智能报平安页面-->
+<view class="safety-container">
+  <!-- 顶部成员信息 -->
+  <view class="safety-header fade-in">
+    <image 
+      src="/assets/avatars/{{member.photoHash}}.jpg" 
+      mode="aspectFill"
+      class="member-avatar"
+    ></image>
+    <text class="header-text">给{{member.nickname}}报个平安</text>
+  </view>
+
+  <!-- 消息输入区 -->
+  <view class="message-input-section card fade-in">
+    <textarea 
+      class="message-textarea"
+      placeholder="告诉{{member.nickname}}你最近怎么样..."
+      value="{{messageContent}}"
+      maxlength="500"
+      bindinput="handleInput"
+      auto-height
+    />
+    
+    <!-- 高亮预览 -->
+    <view wx:if="{{highlightedContent}}" class="highlight-preview">
+      <rich-text nodes="{{highlightedContent}}"></rich-text>
+    </view>
+
+    <!-- 字数统计 -->
+    <view class="word-count">
+      <text class="count-text">{{messageContent.length}}/500</text>
+    </view>
+  </view>
+
+  <!-- 快捷短语 -->
+  <view class="quick-phrases card fade-in">
+    <text class="section-title">快捷短语</text>
+    <view class="phrases-list">
+      <view 
+        wx:for="{{['我很好', '吃饱了', '工作顺利', '身体健康', '想你了', '平安到家']}}"
+        wx:key="index"
+        class="phrase-tag"
+        data-phrase="{{item}}"
+        bindtap="handleQuickPhrase"
+      >
+        <text class="phrase-text">{{item}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 定时发送设置 -->
+  <view class="schedule-section card fade-in">
+    <view class="schedule-header">
+      <text class="section-title">定时发送</text>
+      <van-switch 
+        checked="{{isScheduled}}" 
+        size="20px"
+        bind:change="handleScheduleToggle"
+      />
+    </view>
+
+    <view wx:if="{{isScheduled}}" class="time-picker-section">
+      <text class="picker-label">发送时间：</text>
+      <picker 
+        mode="time" 
+        value="{{scheduledTime}}"
+        bindchange="handleTimeChange"
+      >
+        <view class="picker-value">{{scheduledTime}}</view>
+      </picker>
+    </view>
+  </view>
+
+  <!-- 底部操作按钮 -->
+  <view class="bottom-actions">
+    <van-button 
+      plain 
+      round 
+      icon="volume-o"
+      bind:click="handleVoiceInput"
+      custom-class="voice-button"
+    >
+      语音输入
+    </van-button>
+
+    <van-button 
+      type="primary"
+      round
+      block
+      loading="{{sending}}"
+      loading-text="发送中..."
+      bind:click="handleSend"
+      custom-class="send-button"
+    >
+      {{isScheduled ? '定时发送' : '立即发送'}}
+    </van-button>
+  </view>
+</view>

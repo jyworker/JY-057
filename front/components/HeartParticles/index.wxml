@@ -1,0 +1,9 @@
+<!--情感粒子组件-->
+<view class="heart-particles-container">
+  <canvas 
+    type="webgl" 
+    id="{{canvasId}}" 
+    class="particles-canvas"
+    style="width: {{width}}px; height: {{height}}px;"
+  ></canvas>
+</view>

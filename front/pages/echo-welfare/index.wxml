@@ -1,0 +1,160 @@
+<!-- 公益联动详情页 -->
+<view class="welfare-container">
+  <!-- 页面头部 -->
+  <view class="welfare-header">
+    <text class="header-title">🌱 公益联动</text>
+    <text class="header-subtitle">每一次拥抱，让世界更暖0.001℃</text>
+  </view>
+
+  <!-- 加载状态 -->
+  <view wx:if="{{loading}}" class="loading-section">
+    <van-loading type="spinner" color="#ff6a88" />
+  </view>
+
+  <view wx:else class="welfare-content">
+    <!-- 平台统计 -->
+    <view class="stats-section">
+      <text class="section-title">📊 平台数据</text>
+      <view class="stats-grid">
+        <view class="stat-card primary">
+          <text class="stat-icon">🫂</text>
+          <text class="stat-value">{{platformStats.totalPlatformHugs || 0}}</text>
+          <text class="stat-label">总拥抱数</text>
+        </view>
+        <view class="stat-card">
+          <text class="stat-icon">💝</text>
+          <text class="stat-value">¥{{platformStats.totalWelfareValue || 0}}</text>
+          <text class="stat-label">公益总金额</text>
+        </view>
+        <view class="stat-card">
+          <text class="stat-icon">👨‍👩‍👧‍👦</text>
+          <text class="stat-value">{{platformStats.helpedFamiliesCount || 0}}</text>
+          <text class="stat-label">帮助家庭数</text>
+        </view>
+        <view class="stat-card">
+          <text class="stat-icon">✨</text>
+          <text class="stat-value">{{platformStats.currentMonthHugs || 0}}</text>
+          <text class="stat-label">本月拥抱数</text>
+        </view>
+      </view>
+
+      <!-- 实时贡献者 -->
+      <view class="realtime-box">
+        <text class="realtime-text">🔴 当前在线贡献者：</text>
+        <text class="realtime-count">{{platformStats.realtimeContributors || 0}}</text>
+        <text class="realtime-unit">人</text>
+      </view>
+    </view>
+
+    <!-- 里程碑 -->
+    <view class="milestone-section" wx:if="{{platformStats.milestones && platformStats.milestones.length > 0}}">
+      <text class="section-title">🏆 里程碑</text>
+      <view class="milestone-list">
+        <view 
+          wx:for="{{platformStats.milestones}}" 
+          wx:key="value"
+          class="milestone-item {{item.reachedAt ? 'reached' : ''}}"
+        >
+          <view class="milestone-icon">
+            <text wx:if="{{item.reachedAt}}">✅</text>
+            <text wx:else>⏳</text>
+          </view>
+          <view class="milestone-content">
+            <text class="milestone-value">{{item.value}}</text>
+            <text class="milestone-desc">{{item.description}}</text>
+            <text wx:if="{{item.reachedAt}}" class="milestone-date">达成时间：{{item.reachedAt}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 我的贡献 -->
+    <view class="contribution-section">
+      <text class="section-title">💪 我的贡献</text>
+      <view class="contribution-card">
+        <view class="contribution-header">
+          <text class="contribution-title">您已为公益事业贡献</text>
+        </view>
+        <view class="contribution-stats">
+          <view class="contribution-item">
+            <text class="contribution-label">总拥抱数</text>
+            <text class="contribution-value">{{myContribution.totalHugs || 0}}</text>
+          </view>
+          <view class="contribution-item">
+            <text class="contribution-label">公益价值</text>
+            <text class="contribution-value">¥{{myContribution.totalValue || 0}}</text>
+          </view>
+          <view class="contribution-item">
+            <text class="contribution-label">排名</text>
+            <text class="contribution-value">TOP {{myContribution.ranking || '-'}}</text>
+          </view>
+        </view>
+
+        <!-- 成就徽章 -->
+        <view class="achievements" wx:if="{{myContribution.achievements && myContribution.achievements.length > 0}}">
+          <text class="achievements-title">🏅 已获得成就</text>
+          <view class="badges-list">
+            <view 
+              wx:for="{{myContribution.achievements}}" 
+              wx:key="achievementId"
+              class="badge-item"
+            >
+              <text class="badge-icon">{{item.icon}}</text>
+              <text class="badge-name">{{item.name}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 公益故事墙 -->
+    <view class="stories-section">
+      <text class="section-title">📖 公益故事墙</text>
+      <text class="section-desc">被帮助的家庭故事（匿名化处理）</text>
+
+      <view wx:if="{{loadingStories}}" class="loading-box">
+        <van-loading type="spinner" color="#ff6a88" size="24px" />
+      </view>
+
+      <view wx:elif="{{stories.length === 0}}" class="empty-box">
+        <text class="empty-text">暂无故事</text>
+      </view>
+
+      <view wx:else class="stories-list">
+        <view 
+          wx:for="{{stories}}" 
+          wx:key="storyId"
+          class="story-card"
+        >
+          <view class="story-header">
+            <text class="story-location">📍 {{item.location}}</text>
+            <text class="story-date">{{item.date}}</text>
+          </view>
+          <text class="story-content">{{item.content}}</text>
+          <view class="story-footer">
+            <text class="story-author">— {{item.author}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 加载更多 -->
+      <view wx:if="{{hasMore}}" class="load-more" bindtap="loadMoreStories">
+        <text class="load-more-text">{{loadingMore ? '加载中...' : '加载更多'}}</text>
+      </view>
+    </view>
+
+    <!-- 向善理念 -->
+    <view class="philosophy-section">
+      <text class="philosophy-title">💝 AI向善理念</text>
+      <text class="philosophy-text">
+        "拥抱妈妈"平台恪守科技向善原则：AI不替代真情，只赋能温暖；
+        代码不消费悲伤，只守护思念。每一次拥抱，每一份平安，
+        都在让爱流动，让善意传递。
+      </text>
+      <text class="philosophy-footer">让科技长出温暖的掌心 ❤️</text>
+    </view>
+  </view>
+</view>
+
+<!-- Toast提示 -->
+<van-toast id="van-toast" />

@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hugmom.back.mapper.WelfareMapper">
+
+    <!-- ========== 公益贡献相关 ========== -->
+    
+    <resultMap id="ContributionResultMap" type="com.hugmom.back.entity.WelfareContribution">
+        <id column="id" property="id"/>
+        <result column="contribution_id" property="contributionId"/>
+        <result column="user_id" property="userId"/>
+        <result column="date" property="date"/>
+        <result column="hug_count" property="hugCount"/>
+        <result column="contribution_value" property="contributionValue"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 插入或更新公益贡献记录 -->
+    <insert id="insertOrUpdateContribution" parameterType="com.hugmom.back.entity.WelfareContribution">
+        INSERT INTO hm_welfare_contribution (
+            contribution_id, user_id, date, hug_count, contribution_value, create_time, update_time
+        ) VALUES (
+            #{contributionId}, #{userId}, #{date}, #{hugCount}, #{contributionValue}, NOW(), NOW()
+        )
+        ON DUPLICATE KEY UPDATE
+            hug_count = hug_count + #{hugCount},
+            contribution_value = contribution_value + #{contributionValue},
+            update_time = NOW()
+    </insert>
+
+    <!-- 查询用户总贡献值 -->
+    <select id="selectTotalContributionByUserId" resultType="java.math.BigDecimal">
+        SELECT IFNULL(SUM(contribution_value), 0)
+        FROM hm_welfare_contribution
+        WHERE user_id = #{userId}
+    </select>
+
+    <!-- 查询用户贡献历史 -->
+    <select id="selectContributionHistory" resultMap="ContributionResultMap">
+        SELECT *
+        FROM hm_welfare_contribution
+        WHERE user_id = #{userId}
+        ORDER BY date DESC
+        <if test="limit != null">
+            LIMIT #{limit}
+        </if>
+    </select>
+
+    <!-- 查询用户贡献排名 -->
+    <select id="selectUserRank" resultType="java.lang.Integer">
+        SELECT COUNT(*) + 1 AS rank
+        FROM (
+            SELECT user_id, SUM(contribution_value) AS total_contribution
+            FROM hm_welfare_contribution
+            GROUP BY user_id
+        ) AS user_contributions
+        WHERE total_contribution > (
+            SELECT IFNULL(SUM(contribution_value), 0)
+            FROM hm_welfare_contribution
+            WHERE user_id = #{userId}
+        )
+    </select>
+
+    <!-- ========== 公益成就相关 ========== -->
+    
+    <resultMap id="AchievementResultMap" type="com.hugmom.back.entity.WelfareAchievement">
+        <id column="id" property="id"/>
+        <result column="achievement_id" property="achievementId"/>
+        <result column="user_id" property="userId"/>
+        <result column="name" property="name"/>
+        <result column="description" property="description"/>
+        <result column="icon" property="icon"/>
+        <result column="unlocked_at" property="unlockedAt"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <!-- 插入成就 -->
+    <insert id="insertAchievement" parameterType="com.hugmom.back.entity.WelfareAchievement">
+        INSERT INTO hm_welfare_achievement (
+            achievement_id, user_id, name, description, icon, unlocked_at, create_time
+        ) VALUES (
+            #{achievementId}, #{userId}, #{name}, #{description}, #{icon}, #{unlockedAt}, NOW()
+        )
+    </insert>
+
+    <!-- 查询用户所有成就 -->
+    <select id="selectAchievementsByUserId" resultMap="AchievementResultMap">
+        SELECT *
+        FROM hm_welfare_achievement
+        WHERE user_id = #{userId}
+        ORDER BY unlocked_at DESC
+    </select>
+
+    <!-- 检查用户是否已解锁某成就 -->
+    <select id="checkAchievementExists" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM hm_welfare_achievement
+        WHERE user_id = #{userId} AND achievement_id = #{achievementId}
+    </select>
+
+    <!-- ========== 公益故事相关 ========== -->
+    
+    <resultMap id="StoryResultMap" type="com.hugmom.back.entity.WelfareStory">
+        <id column="id" property="id"/>
+        <result column="story_id" property="storyId"/>
+        <result column="title" property="title"/>
+        <result column="content" property="content"/>
+        <result column="location" property="location"/>
+        <result column="help_date" property="helpDate"/>
+        <result column="image_urls" property="imageUrls"/>
+        <result column="is_published" property="isPublished"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 查询已发布的公益故事列表（分页） -->
+    <select id="selectPublishedStories" resultMap="StoryResultMap">
+        SELECT *
+        FROM hm_welfare_story
+        WHERE is_published = 1
+        ORDER BY help_date DESC, create_time DESC
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <!-- 统计已发布故事总数 -->
+    <select id="countPublishedStories" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM hm_welfare_story
+        WHERE is_published = 1
+    </select>
+
+    <!-- ========== 平台统计相关 ========== -->
+    
+    <resultMap id="PlatformStatsResultMap" type="com.hugmom.back.entity.WelfarePlatformStats">
+        <id column="id" property="id"/>
+        <result column="stat_date" property="statDate"/>
+        <result column="total_platform_hugs" property="totalPlatformHugs"/>
+        <result column="total_welfare_value" property="totalWelfareValue"/>
+        <result column="helped_families_count" property="helpedFamiliesCount"/>
+        <result column="current_month_hugs" property="currentMonthHugs"/>
+        <result column="realtime_contributors" property="realtimeContributors"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 查询最新的平台统计数据 -->
+    <select id="selectLatestPlatformStats" resultMap="PlatformStatsResultMap">
+        SELECT *
+        FROM hm_welfare_platform_stats
+        ORDER BY stat_date DESC
+        LIMIT 1
+    </select>
+
+    <!-- 插入或更新平台统计数据 -->
+    <insert id="insertOrUpdatePlatformStats" parameterType="com.hugmom.back.entity.WelfarePlatformStats">
+        INSERT INTO hm_welfare_platform_stats (
+            stat_date, total_platform_hugs, total_welfare_value, helped_families_count,
+            current_month_hugs, realtime_contributors, create_time, update_time
+        ) VALUES (
+            #{statDate}, #{totalPlatformHugs}, #{totalWelfareValue}, #{helpedFamiliesCount},
+            #{currentMonthHugs}, #{realtimeContributors}, NOW(), NOW()
+        )
+        ON DUPLICATE KEY UPDATE
+            total_platform_hugs = #{totalPlatformHugs},
+            total_welfare_value = #{totalWelfareValue},
+            helped_families_count = #{helpedFamiliesCount},
+            current_month_hugs = #{currentMonthHugs},
+            realtime_contributors = #{realtimeContributors},
+            update_time = NOW()
+    </insert>
+
+</mapper>

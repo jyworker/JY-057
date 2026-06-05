@@ -1,0 +1,62 @@
+/* 通用样式 */
+
+/* 布局相关 */
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* 文本相关 */
+.text-center {
+  text-align: center;
+}
+
+.text-primary {
+  color: #FF6B6B;
+}
+
+.text-secondary {
+  color: #666;
+}
+
+.text-muted {
+  color: #999;
+}
+
+.text-small {
+  font-size: 24rpx;
+}
+
+.text-large {
+  font-size: 36rpx;
+}
+
+/* 间距相关 */
+.mt-10 { margin-top: 10rpx; }
+.mt-20 { margin-top: 20rpx; }
+.mt-30 { margin-top: 30rpx; }
+.mb-10 { margin-bottom: 10rpx; }
+.mb-20 { margin-bottom: 20rpx; }
+.mb-30 { margin-bottom: 30rpx; }
+.ml-10 { margin-left: 10rpx; }
+.mr-10 { margin-right: 10rpx; }
+.p-20 { padding: 20rpx; }
+.p-30 { padding: 30rpx; }
+
+/* 圆角 */
+.radius-small { border-radius: 8rpx; }
+.radius-medium { border-radius: 16rpx; }
+.radius-large { border-radius: 24rpx; }
+.radius-full { border-radius: 50%; }

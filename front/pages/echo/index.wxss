@@ -1,0 +1,374 @@
+.echo-container {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #fff5f5 0%, #f8f8f8 100%);
+  padding: 20px;
+  padding-bottom: 40px;
+}
+
+/* 页面头部 */
+.page-header {
+  text-align: center;
+  padding: 20px 0 30px;
+}
+
+.page-title {
+  display: block;
+  font-size: 28px;
+  font-weight: bold;
+  background: linear-gradient(135deg, #ff9a56 0%, #ff6a88 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 8px;
+}
+
+.page-subtitle {
+  display: block;
+  font-size: 14px;
+  color: #999;
+}
+
+/* 卡片通用样式 */
+.card-shadow {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* 年度报告卡片 */
+.annual-report-card {
+  background: linear-gradient(135deg, #fff 0%, #fffbf8 100%);
+  border-radius: 20px;
+  padding: 24px;
+  margin-bottom: 24px;
+  border: 2px solid #ffebee;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+.card-badge {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.card-badge.new {
+  background: linear-gradient(135deg, #ff9a56 0%, #ff6a88 100%);
+  color: #fff;
+}
+
+.card-content {
+  margin-bottom: 20px;
+}
+
+.report-desc {
+  display: block;
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 16px;
+}
+
+.report-preview {
+  display: flex;
+  justify-content: space-around;
+  padding: 16px 0;
+  background: #fff;
+  border-radius: 12px;
+}
+
+.preview-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.preview-value {
+  font-size: 24px;
+  font-weight: bold;
+  color: #ff6a88;
+  margin-bottom: 4px;
+}
+
+.preview-label {
+  font-size: 12px;
+  color: #999;
+}
+
+/* 区块样式 */
+.section-block {
+  margin-bottom: 24px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+.section-count {
+  font-size: 13px;
+  color: #ff6a88;
+}
+
+.more-link {
+  font-size: 13px;
+  color: #ff6a88;
+}
+
+/* 加载和空状态 */
+.loading-box,
+.empty-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60px 20px;
+  background: #fff;
+  border-radius: 16px;
+}
+
+.empty-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+  opacity: 0.6;
+}
+
+.empty-text {
+  font-size: 15px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.empty-hint {
+  font-size: 13px;
+  color: #999;
+}
+
+/* 妈妈回复列表 */
+.replies-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.reply-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 16px;
+  border-left: 4px solid #f0f0f0;
+  transition: all 0.3s;
+}
+
+.reply-card.unread {
+  border-left-color: #ff6a88;
+  background: #fffbfc;
+}
+
+.reply-card:active {
+  transform: scale(0.98);
+}
+
+.reply-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.reply-from {
+  display: flex;
+  align-items: center;
+}
+
+.from-avatar {
+  font-size: 24px;
+  margin-right: 8px;
+}
+
+.from-name {
+  font-size: 15px;
+  font-weight: 500;
+  color: #333;
+}
+
+.reply-time {
+  font-size: 12px;
+  color: #999;
+}
+
+.reply-content {
+  margin-bottom: 8px;
+}
+
+.voice-reply {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  background: #f8f8f8;
+  border-radius: 12px;
+}
+
+.voice-icon {
+  font-size: 20px;
+  margin-right: 8px;
+}
+
+.voice-text {
+  flex: 1;
+  font-size: 14px;
+  color: #666;
+}
+
+.text-reply {
+  font-size: 15px;
+  color: #333;
+  line-height: 1.6;
+}
+
+.emoji-reply {
+  display: flex;
+  justify-content: center;
+  padding: 12px 0;
+}
+
+.big-emoji {
+  font-size: 48px;
+}
+
+.reply-emotion {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.emotion-tag {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.emotion-warm {
+  background: #fff0f0;
+  color: #ff6a88;
+}
+
+.emotion-caring {
+  background: #f0f8ff;
+  color: #4a9eff;
+}
+
+.emotion-proud {
+  background: #fff8e1;
+  color: #ffa726;
+}
+
+/* 公益统计 */
+.welfare-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.welfare-stat-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px 12px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.welfare-stat-card.highlight {
+  background: linear-gradient(135deg, #fff5f5 0%, #ffebee 100%);
+  border: 2px solid #ff6a88;
+}
+
+.stat-value {
+  display: block;
+  font-size: 24px;
+  font-weight: bold;
+  color: #ff6a88;
+  margin-bottom: 8px;
+}
+
+.stat-label {
+  display: block;
+  font-size: 12px;
+  color: #666;
+}
+
+.welfare-desc {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+}
+
+.desc-text {
+  display: block;
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+
+.desc-highlight {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #ff6a88;
+}
+
+/* 历史报告 */
+.history-reports {
+  margin-top: 24px;
+}
+
+.reports-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.history-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s;
+}
+
+.history-card:active {
+  transform: scale(0.95);
+}
+
+.history-year {
+  display: block;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.history-date {
+  display: block;
+  font-size: 12px;
+  color: #999;
+}

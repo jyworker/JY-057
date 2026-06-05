@@ -1,0 +1,70 @@
+<!--虚拟拥抱页面-->
+<view class="hug-container">
+  <!-- 粒子背景 -->
+  <heart-particles 
+    id="heart-particles"
+    width="{{canvasWidth}}" 
+    height="{{canvasHeight}}"
+  />
+
+  <!-- 主内容区 -->
+  <view class="hug-content">
+    <!-- 加载状态 -->
+    <view wx:if="{{!member}}" class="loading-section">
+      <van-loading type="spinner" color="#ff6a88" />
+      <text class="loading-text">加载中...</text>
+    </view>
+
+    <!-- 成员信息 -->
+    <view wx:else class="member-section fade-in">
+      <view class="member-avatar">
+        <image 
+          wx:if="{{member.photoHash}}"
+          src="/assets/avatars/{{member.photoHash}}.jpg" 
+          mode="aspectFill"
+          class="avatar-img {{isHugging ? 'heartbeat-animation' : ''}}"
+        ></image>
+        <view wx:else class="avatar-placeholder">
+          <text class="placeholder-text">{{member.nickname ? member.nickname.charAt(0) : '?'}}</text>
+        </view>
+      </view>
+      <text class="member-name">{{member.nickname}}</text>
+    </view>
+
+    <!-- 拥抱提示 -->
+    <view class="hug-hint fade-in">
+      <text class="hint-text">
+        {{isHugging ? '感受这份温暖...' : '长按屏幕，送出你的拥抱'}}
+      </text>
+    </view>
+
+    <!-- 拥抱交互区 -->
+    <view 
+      class="hug-touch-area {{isHugging ? 'hugging' : ''}}"
+      bindlongpress="handleLongPress"
+      bindtouchend="handleTouchEnd"
+      bindtouchcancel="handleTouchEnd"
+    >
+      <view class="touch-circle {{isHugging ? 'active' : ''}}">
+        <text class="circle-text">{{isHugging ? '拥抱中' : '长按'}}</text>
+      </view>
+    </view>
+
+    <!-- 拥抱反馈提示 -->
+    <view wx:if="{{showFeedback}}" class="feedback-toast fade-in">
+      <text class="feedback-text">拥抱已送达{{member.nickname}}！</text>
+    </view>
+
+    <!-- 底部操作 -->
+    <view class="bottom-actions">
+      <van-button 
+        plain 
+        round 
+        size="small"
+        bind:click="handleViewHistory"
+      >
+        查看拥抱记录
+      </van-button>
+    </view>
+  </view>
+</view>

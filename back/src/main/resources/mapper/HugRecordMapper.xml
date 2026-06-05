@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hugmom.back.mapper.HugRecordMapper">
+
+    <!-- 结果映射 -->
+    <resultMap id="BaseResultMap" type="com.hugmom.back.entity.HugRecord">
+        <id column="id" property="id"/>
+        <result column="hug_id" property="hugId"/>
+        <result column="user_id" property="userId"/>
+        <result column="member_id" property="memberId"/>
+        <result column="duration" property="duration"/>
+        <result column="timestamp" property="timestamp"/>
+        <result column="emotion" property="emotion"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 基础列 -->
+    <sql id="Base_Column_List">
+        id, hug_id, user_id, member_id, duration, timestamp, emotion, create_time, update_time
+    </sql>
+
+    <!-- 插入拥抱记录 -->
+    <insert id="insert" parameterType="com.hugmom.back.entity.HugRecord">
+        INSERT INTO hm_hug_record (
+            hug_id, user_id, member_id, duration, timestamp, emotion, create_time, update_time
+        ) VALUES (
+            #{hugId}, #{userId}, #{memberId}, #{duration}, #{timestamp}, #{emotion}, NOW(), NOW()
+        )
+    </insert>
+
+    <!-- 根据成员ID查询拥抱历史 -->
+    <select id="selectByMemberId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM hm_hug_record
+        WHERE member_id = #{memberId}
+        ORDER BY timestamp DESC
+        LIMIT 100
+    </select>
+
+    <!-- 获取拥抱统计数据 -->
+    <select id="selectStatsByMemberId" resultType="java.util.HashMap">
+        SELECT 
+            COUNT(*) AS totalCount,
+            IFNULL(SUM(duration), 0) AS totalDuration,
+            MAX(timestamp) AS lastHugTime
+        FROM hm_hug_record
+        WHERE member_id = #{memberId}
+    </select>
+
+</mapper>

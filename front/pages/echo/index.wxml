@@ -1,0 +1,151 @@
+<!-- 爱的回响 - 双向温暖闭环 -->
+<view class="echo-container">
+  <!-- 页面标题 -->
+  <view class="page-header">
+    <text class="page-title">爱的回响</text>
+    <text class="page-subtitle">双向温暖闭环 · AI传递爱</text>
+  </view>
+
+  <!-- 年度报告卡片 -->
+  <view class="annual-report-card card-shadow">
+    <view class="card-header">
+      <text class="card-title">📊 年度爱的报告</text>
+      <text class="card-badge new" wx:if="{{hasNewReport}}">NEW</text>
+    </view>
+    <view class="card-content">
+      <text class="report-desc">生成您的2026年度爱的数据报告</text>
+      <view class="report-preview" wx:if="{{latestReport}}">
+        <view class="preview-item">
+          <text class="preview-value">{{latestReport.totalHugs}}</text>
+          <text class="preview-label">次拥抱</text>
+        </view>
+        <view class="preview-item">
+          <text class="preview-value">{{latestReport.totalSafetyMessages}}</text>
+          <text class="preview-label">次报平安</text>
+        </view>
+        <view class="preview-item">
+          <text class="preview-value">{{latestReport.warmDays}}</text>
+          <text class="preview-label">温暖天数</text>
+        </view>
+      </view>
+    </view>
+    <view class="card-actions">
+      <van-button 
+        type="primary" 
+        round 
+        block 
+        bind:click="handleGenerateReport"
+        loading="{{generatingReport}}"
+      >
+        {{latestReport ? '查看报告' : '生成报告'}}
+      </van-button>
+    </view>
+  </view>
+
+  <!-- 妈妈的回复列表 -->
+  <view class="section-block">
+    <view class="section-header">
+      <text class="section-title">💌 妈妈的回复</text>
+      <text class="section-count" wx:if="{{motherReplies.length > 0}}">{{unreadCount > 0 ? unreadCount + '条未读' : '已读全部'}}</text>
+    </view>
+
+    <view wx:if="{{loadingReplies}}" class="loading-box">
+      <van-loading type="spinner" color="#ff6a88" />
+    </view>
+
+    <view wx:elif="{{motherReplies.length === 0}}" class="empty-box">
+      <text class="empty-icon">📭</text>
+      <text class="empty-text">还没有收到妈妈的回复</text>
+      <text class="empty-hint">发送拥抱或报平安后，妈妈可以回复哦</text>
+    </view>
+
+    <view wx:else class="replies-list">
+      <view 
+        wx:for="{{motherReplies}}" 
+        wx:key="replyId"
+        class="reply-card {{item.isRead ? '' : 'unread'}}"
+        bindtap="handleReplyTap"
+        data-reply="{{item}}"
+      >
+        <view class="reply-header">
+          <view class="reply-from">
+            <text class="from-avatar">👩</text>
+            <text class="from-name">{{item.motherName}}</text>
+          </view>
+          <text class="reply-time">{{item.receiveTime}}</text>
+        </view>
+        <view class="reply-content">
+          <view wx:if="{{item.replyType === 'voice'}}" class="voice-reply">
+            <text class="voice-icon">🎤</text>
+            <text class="voice-text">{{item.aiTranscript || '语音消息'}}</text>
+          </view>
+          <view wx:elif="{{item.replyType === 'text'}}" class="text-reply">
+            <text>{{item.textContent}}</text>
+          </view>
+          <view wx:elif="{{item.replyType === 'emoji'}}" class="emoji-reply">
+            <text class="big-emoji">{{item.emojiContent}}</text>
+          </view>
+        </view>
+        <view class="reply-emotion" wx:if="{{item.emotion}}">
+          <text class="emotion-tag emotion-{{item.emotion}}">
+            {{item.emotion === 'warm' ? '💝温暖' : item.emotion === 'caring' ? '🫂关怀' : '🌟骄傲'}}
+          </text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 公益联动 -->
+  <view class="section-block">
+    <view class="section-header">
+      <text class="section-title">🌱 公益联动</text>
+      <text class="more-link" bindtap="navigateToWelfare">查看详情 →</text>
+    </view>
+
+    <view wx:if="{{loadingWelfare}}" class="loading-box">
+      <van-loading type="spinner" color="#ff6a88" />
+    </view>
+
+    <view wx:else class="welfare-summary">
+      <view class="welfare-stat-card">
+        <text class="stat-value">{{welfareStats.totalPlatformHugs || 0}}</text>
+        <text class="stat-label">平台总拥抱数</text>
+      </view>
+      <view class="welfare-stat-card">
+        <text class="stat-value">{{welfareStats.helpedFamiliesCount || 0}}</text>
+        <text class="stat-label">帮助家庭数</text>
+      </view>
+      <view class="welfare-stat-card highlight">
+        <text class="stat-value">{{myContribution.totalHugs || 0}}</text>
+        <text class="stat-label">我的贡献</text>
+      </view>
+    </view>
+
+    <view class="welfare-desc">
+      <text class="desc-text">每完成1次拥抱，平台为孤寡妈妈储备0.001份关爱</text>
+      <text class="desc-highlight">让爱在平安中生生不息 ❤️</text>
+    </view>
+  </view>
+
+  <!-- 历史报告入口 -->
+  <view class="history-reports" wx:if="{{reportHistory.length > 1}}">
+    <view class="section-header">
+      <text class="section-title">📚 历史报告</text>
+    </view>
+    <view class="reports-grid">
+      <view 
+        wx:for="{{reportHistory}}" 
+        wx:key="reportId"
+        class="history-card"
+        bindtap="handleViewReport"
+        data-report-id="{{item.reportId}}"
+      >
+        <text class="history-year">{{item.year}}年</text>
+        <text class="history-date">{{item.generateTime}}</text>
+      </view>
+    </view>
+  </view>
+</view>
+
+<!-- Toast提示 -->
+<van-toast id="van-toast" />

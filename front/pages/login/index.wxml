@@ -1,0 +1,39 @@
+<!--登录页面-->
+<view class="login-container">
+  <view class="login-content">
+    <!-- Logo区域 -->
+    <view class="logo-section fade-in">
+      <image class="logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" mode="aspectFit"></image>
+      <text class="app-name">拥抱妈妈</text>
+      <text class="app-slogan">爱在平安</text>
+    </view>
+
+    <!-- 描述文字 -->
+    <view class="description fade-in">
+      <text class="desc-text">AI向善 · 技术隐形于爱</text>
+    </view>
+
+    <!-- 登录按钮 -->
+    <view class="button-section fade-in">
+      <van-button
+        type="primary"
+        block
+        round
+        loading="{{loading}}"
+        loading-text="登录中..."
+        bind:click="handleLogin"
+        custom-class="login-button"
+      >
+        微信授权登录
+      </van-button>
+    </view>
+
+    <!-- 隐私协议 -->
+    <view class="privacy-section">
+      <text class="privacy-text">登录即表示同意</text>
+      <text class="privacy-link">《用户协议》</text>
+      <text class="privacy-text">和</text>
+      <text class="privacy-link">《隐私政策》</text>
+    </view>
+  </view>
+</view>
