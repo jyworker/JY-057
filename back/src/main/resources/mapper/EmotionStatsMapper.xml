@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hugmom.back.mapper.EmotionStatsMapper">
+
+    <resultMap id="BaseResultMap" type="com.hugmom.back.entity.EmotionStats">
+        <id column="id" property="id"/>
+        <result column="stat_id" property="statId"/>
+        <result column="stat_period" property="statPeriod"/>
+        <result column="stat_date" property="statDate"/>
+        <result column="year" property="year"/>
+        <result column="month" property="month"/>
+        <result column="week" property="week"/>
+        <result column="emotion" property="emotion"/>
+        <result column="count" property="count"/>
+        <result column="ratio" property="ratio"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, stat_id, stat_period, stat_date, year, month, week,
+        emotion, count, ratio, create_time, update_time
+    </sql>
+
+    <insert id="insert" parameterType="com.hugmom.back.entity.EmotionStats">
+        INSERT INTO hm_emotion_stats (
+            stat_id, stat_period, stat_date, year, month, week,
+            emotion, count, ratio, create_time, update_time
+        ) VALUES (
+            #{statId}, #{statPeriod}, #{statDate}, #{year}, #{month}, #{week},
+            #{emotion}, #{count}, #{ratio}, NOW(), NOW()
+        )
+    </insert>
+
+    <update id="update" parameterType="com.hugmom.back.entity.EmotionStats">
+        UPDATE hm_emotion_stats
+        SET count = #{count},
+            ratio = #{ratio},
+            update_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <select id="selectByPeriodDateEmotion" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM hm_emotion_stats
+        WHERE stat_period = #{statPeriod}
+          AND stat_date = #{statDate}
+          AND emotion = #{emotion}
+        LIMIT 1
+    </select>
+
+    <select id="selectByDateRange" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM hm_emotion_stats
+        WHERE stat_period = #{statPeriod}
+          AND stat_date &gt;= #{startDate}
+          AND stat_date &lt;= #{endDate}
+        ORDER BY stat_date ASC
+    </select>
+
+    <select id="aggregateEmotionStatsByDay" resultType="java.util.HashMap">
+        SELECT
+            DATE(timestamp) AS stat_date,
+            emotion,
+            COUNT(*) AS count
+        FROM hm_hug_record
+        WHERE timestamp &gt;= #{startDate}
+          AND timestamp &lt; DATE_ADD(#{endDate}, INTERVAL 1 DAY)
+          AND emotion IS NOT NULL
+          AND emotion != ''
+        GROUP BY DATE(timestamp), emotion
+        ORDER BY stat_date ASC, count DESC
+    </select>
+
+    <select id="aggregateEmotionStatsByWeek" resultType="java.util.HashMap">
+        SELECT
+            YEAR(timestamp) AS year,
+            WEEK(timestamp, 3) AS week,
+            DATE(DATE_SUB(timestamp, INTERVAL (DAYOFWEEK(timestamp) - 2) DAY)) AS stat_date,
+            emotion,
+            COUNT(*) AS count
+        FROM hm_hug_record
+        WHERE timestamp &gt;= #{startDate}
+          AND timestamp &lt; DATE_ADD(#{endDate}, INTERVAL 1 DAY)
+          AND emotion IS NOT NULL
+          AND emotion != ''
+        GROUP BY YEAR(timestamp), WEEK(timestamp, 3), emotion
+        ORDER BY stat_date ASC, count DESC
+    </select>
+
+    <select id="aggregateEmotionStatsByMonth" resultType="java.util.HashMap">
+        SELECT
+            YEAR(timestamp) AS year,
+            MONTH(timestamp) AS month,
+            DATE(DATE_FORMAT(timestamp, '%Y-%m-01')) AS stat_date,
+            emotion,
+            COUNT(*) AS count
+        FROM hm_hug_record
+        WHERE timestamp &gt;= #{startDate}
+          AND timestamp &lt; DATE_ADD(#{endDate}, INTERVAL 1 DAY)
+          AND emotion IS NOT NULL
+          AND emotion != ''
+        GROUP BY YEAR(timestamp), MONTH(timestamp), emotion
+        ORDER BY stat_date ASC, count DESC
+    </select>
+
+    <delete id="deleteByPeriodDate">
+        DELETE FROM hm_emotion_stats
+        WHERE stat_period = #{statPeriod}
+          AND stat_date = #{statDate}
+    </delete>
+
+</mapper>

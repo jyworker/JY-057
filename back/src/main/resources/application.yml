@@ -59,6 +59,20 @@ wechat:
     appid: wxe1423f5c849928c9  # 替换为你的小程序AppID
     secret: a35e87c412ce6b179fc2a5ed4d36ab42  # 替换为你的小程序AppSecret
 
+# Redis配置
+  redis:
+    host: localhost
+    port: 6379
+    password:
+    database: 0
+    timeout: 3000ms
+    lettuce:
+      pool:
+        max-active: 8
+        max-wait: -1ms
+        max-idle: 8
+        min-idle: 0
+
 # 自定义配置
 hugmom:
   # 文件上传路径

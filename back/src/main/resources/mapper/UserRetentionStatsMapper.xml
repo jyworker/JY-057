@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hugmom.back.mapper.UserRetentionStatsMapper">
+
+    <resultMap id="BaseResultMap" type="com.hugmom.back.entity.UserRetentionStats">
+        <id column="id" property="id"/>
+        <result column="stat_id" property="statId"/>
+        <result column="stat_date" property="statDate"/>
+        <result column="day1" property="day1"/>
+        <result column="day3" property="day3"/>
+        <result column="day7" property="day7"/>
+        <result column="day14" property="day14"/>
+        <result column="day30" property="day30"/>
+        <result column="new_user_count" property="newUserCount"/>
+        <result column="active_user_count" property="activeUserCount"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, stat_id, stat_date, day1, day3, day7, day14, day30,
+        new_user_count, active_user_count, create_time, update_time
+    </sql>
+
+    <insert id="insert" parameterType="com.hugmom.back.entity.UserRetentionStats">
+        INSERT INTO hm_user_retention_stats (
+            stat_id, stat_date, day1, day3, day7, day14, day30,
+            new_user_count, active_user_count, create_time, update_time
+        ) VALUES (
+            #{statId}, #{statDate}, #{day1}, #{day3}, #{day7}, #{day14}, #{day30},
+            #{newUserCount}, #{activeUserCount}, NOW(), NOW()
+        )
+    </insert>
+
+    <update id="update" parameterType="com.hugmom.back.entity.UserRetentionStats">
+        UPDATE hm_user_retention_stats
+        SET day1 = #{day1},
+            day3 = #{day3},
+            day7 = #{day7},
+            day14 = #{day14},
+            day30 = #{day30},
+            new_user_count = #{newUserCount},
+            active_user_count = #{activeUserCount},
+            update_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <select id="selectByStatDate" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM hm_user_retention_stats
+        WHERE stat_date = #{statDate}
+        LIMIT 1
+    </select>
+
+    <select id="selectByDateRange" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM hm_user_retention_stats
+        WHERE stat_date &gt;= #{startDate}
+          AND stat_date &lt;= #{endDate}
+        ORDER BY stat_date ASC
+    </select>
+
+    <select id="aggregateNewUsersByDay" resultType="java.util.HashMap">
+        SELECT
+            DATE(create_time) AS stat_date,
+            COUNT(*) AS new_user_count
+        FROM hm_user
+        WHERE create_time &gt;= #{startDate}
+          AND create_time &lt; DATE_ADD(#{endDate}, INTERVAL 1 DAY)
+        GROUP BY DATE(create_time)
+        ORDER BY stat_date ASC
+    </select>
+
+    <select id="aggregateActiveUsersByDay" resultType="java.util.HashMap">
+        SELECT
+            DATE(timestamp) AS stat_date,
+            COUNT(DISTINCT user_id) AS active_user_count
+        FROM hm_hug_record
+        WHERE timestamp &gt;= #{startDate}
+          AND timestamp &lt; DATE_ADD(#{endDate}, INTERVAL 1 DAY)
+        GROUP BY DATE(timestamp)
+        ORDER BY stat_date ASC
+    </select>
+
+    <select id="selectActiveUserIdsByDateRange" resultType="java.lang.String">
+        SELECT DISTINCT user_id
+        FROM hm_hug_record
+        WHERE timestamp &gt;= #{startDate}
+          AND timestamp &lt; DATE_ADD(#{endDate}, INTERVAL 1 DAY)
+    </select>
+
+</mapper>

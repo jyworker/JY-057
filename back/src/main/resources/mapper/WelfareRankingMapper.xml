@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hugmom.back.mapper.WelfareRankingMapper">
+
+    <resultMap id="BaseResultMap" type="com.hugmom.back.entity.WelfareRanking">
+        <id column="id" property="id"/>
+        <result column="stat_id" property="statId"/>
+        <result column="stat_period" property="statPeriod"/>
+        <result column="stat_date" property="statDate"/>
+        <result column="year" property="year"/>
+        <result column="month" property="month"/>
+        <result column="week" property="week"/>
+        <result column="user_id" property="userId"/>
+        <result column="nick_name" property="nickName"/>
+        <result column="avatar_url" property="avatarUrl"/>
+        <result column="hug_count" property="hugCount"/>
+        <result column="total_contribution" property="totalContribution"/>
+        <result column="ranking" property="ranking"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, stat_id, stat_period, stat_date, year, month, week,
+        user_id, nick_name, avatar_url, hug_count, total_contribution,
+        ranking, create_time, update_time
+    </sql>
+
+    <insert id="insert" parameterType="com.hugmom.back.entity.WelfareRanking">
+        INSERT INTO hm_welfare_ranking (
+            stat_id, stat_period, stat_date, year, month, week,
+            user_id, nick_name, avatar_url, hug_count, total_contribution,
+            ranking, create_time, update_time
+        ) VALUES (
+            #{statId}, #{statPeriod}, #{statDate}, #{year}, #{month}, #{week},
+            #{userId}, #{nickName}, #{avatarUrl}, #{hugCount}, #{totalContribution},
+            #{ranking}, NOW(), NOW()
+        )
+    </insert>
+
+    <update id="update" parameterType="com.hugmom.back.entity.WelfareRanking">
+        UPDATE hm_welfare_ranking
+        SET nick_name = #{nickName},
+            avatar_url = #{avatarUrl},
+            hug_count = #{hugCount},
+            total_contribution = #{totalContribution},
+            ranking = #{ranking},
+            update_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <select id="selectByPeriodDateUser" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM hm_welfare_ranking
+        WHERE stat_period = #{statPeriod}
+          AND stat_date = #{statDate}
+          AND user_id = #{userId}
+        LIMIT 1
+    </select>
+
+    <select id="selectTopNByPeriod" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM hm_welfare_ranking
+        WHERE stat_period = #{statPeriod}
+          AND stat_date = #{statDate}
+        ORDER BY ranking ASC
+        LIMIT #{limit}
+    </select>
+
+    <select id="aggregateWelfareRankingByDay" resultType="java.util.HashMap">
+        SELECT
+            wc.date AS stat_date,
+            wc.user_id,
+            u.nick_name,
+            u.avatar_url,
+            SUM(wc.hug_count) AS hug_count,
+            SUM(wc.contribution_value) AS total_contribution
+        FROM hm_welfare_contribution wc
+        LEFT JOIN hm_user u ON wc.user_id = u.user_id
+        WHERE wc.date &gt;= #{startDate}
+          AND wc.date &lt;= #{endDate}
+        GROUP BY wc.date, wc.user_id
+        ORDER BY total_contribution DESC
+    </select>
+
+    <select id="aggregateWelfareRankingByWeek" resultType="java.util.HashMap">
+        SELECT
+            YEAR(wc.date) AS year,
+            WEEK(wc.date, 3) AS week,
+            DATE(DATE_SUB(wc.date, INTERVAL (DAYOFWEEK(wc.date) - 2) DAY)) AS stat_date,
+            wc.user_id,
+            u.nick_name,
+            u.avatar_url,
+            SUM(wc.hug_count) AS hug_count,
+            SUM(wc.contribution_value) AS total_contribution
+        FROM hm_welfare_contribution wc
+        LEFT JOIN hm_user u ON wc.user_id = u.user_id
+        WHERE wc.date &gt;= #{startDate}
+          AND wc.date &lt;= #{endDate}
+        GROUP BY YEAR(wc.date), WEEK(wc.date, 3), wc.user_id
+        ORDER BY total_contribution DESC
+    </select>
+
+    <select id="aggregateWelfareRankingByMonth" resultType="java.util.HashMap">
+        SELECT
+            YEAR(wc.date) AS year,
+            MONTH(wc.date) AS month,
+            DATE(DATE_FORMAT(wc.date, '%Y-%m-01')) AS stat_date,
+            wc.user_id,
+            u.nick_name,
+            u.avatar_url,
+            SUM(wc.hug_count) AS hug_count,
+            SUM(wc.contribution_value) AS total_contribution
+        FROM hm_welfare_contribution wc
+        LEFT JOIN hm_user u ON wc.user_id = u.user_id
+        WHERE wc.date &gt;= #{startDate}
+          AND wc.date &lt;= #{endDate}
+        GROUP BY YEAR(wc.date), MONTH(wc.date), wc.user_id
+        ORDER BY total_contribution DESC
+    </select>
+
+    <select id="aggregateWelfareRankingAll" resultType="java.util.HashMap">
+        SELECT
+            wc.user_id,
+            u.nick_name,
+            u.avatar_url,
+            SUM(wc.hug_count) AS hug_count,
+            SUM(wc.contribution_value) AS total_contribution
+        FROM hm_welfare_contribution wc
+        LEFT JOIN hm_user u ON wc.user_id = u.user_id
+        GROUP BY wc.user_id
+        ORDER BY total_contribution DESC
+        LIMIT 100
+    </select>
+
+    <delete id="deleteByPeriodDate">
+        DELETE FROM hm_welfare_ranking
+        WHERE stat_period = #{statPeriod}
+          AND stat_date = #{statDate}
+    </delete>
+
+</mapper>

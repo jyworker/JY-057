@@ -304,5 +304,106 @@ INSERT INTO `hm_welfare_story` (`story_id`, `title`, `content`, `location`, `hel
 VALUES ('story_001', '春节的温暖', '在武汉的一位独居老人收到了来自平台的温暖关怀...', '湖北省', '2026-01-25', 1);
 
 -- ========================================
+-- 12. 拥抱统计表 (hm_hug_stats) - 数据聚合服务
+-- ========================================
+DROP TABLE IF EXISTS `hm_hug_stats`;
+CREATE TABLE `hm_hug_stats` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `stat_id` VARCHAR(64) NOT NULL COMMENT '统计唯一标识',
+  `stat_period` VARCHAR(16) NOT NULL COMMENT '统计周期（day:日 week:周 month:月）',
+  `stat_type` VARCHAR(16) NOT NULL COMMENT '统计类型（platform:平台 user:用户 member:成员）',
+  `stat_date` DATE NOT NULL COMMENT '统计日期',
+  `year` INT(11) DEFAULT NULL COMMENT '年份',
+  `month` INT(11) DEFAULT NULL COMMENT '月份',
+  `week` INT(11) DEFAULT NULL COMMENT '周数',
+  `hug_count` INT(11) DEFAULT 0 COMMENT '拥抱次数',
+  `user_count` INT(11) DEFAULT 0 COMMENT '参与用户数',
+  `member_count` INT(11) DEFAULT 0 COMMENT '参与成员数',
+  `total_duration` BIGINT(20) DEFAULT 0 COMMENT '总拥抱时长（毫秒）',
+  `avg_duration` DOUBLE DEFAULT 0 COMMENT '平均拥抱时长（毫秒）',
+  `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_stat_id` (`stat_id`),
+  UNIQUE KEY `uk_period_type_date` (`stat_period`, `stat_type`, `stat_date`),
+  KEY `idx_stat_date` (`stat_date`),
+  KEY `idx_period` (`stat_period`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='拥抱统计表';
+
+-- ========================================
+-- 13. 情感分布统计表 (hm_emotion_stats) - 数据聚合服务
+-- ========================================
+DROP TABLE IF EXISTS `hm_emotion_stats`;
+CREATE TABLE `hm_emotion_stats` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `stat_id` VARCHAR(64) NOT NULL COMMENT '统计唯一标识',
+  `stat_period` VARCHAR(16) NOT NULL COMMENT '统计周期（day:日 week:周 month:月）',
+  `stat_date` DATE NOT NULL COMMENT '统计日期',
+  `year` INT(11) DEFAULT NULL COMMENT '年份',
+  `month` INT(11) DEFAULT NULL COMMENT '月份',
+  `week` INT(11) DEFAULT NULL COMMENT '周数',
+  `emotion` VARCHAR(32) NOT NULL COMMENT '情感标签',
+  `count` INT(11) DEFAULT 0 COMMENT '出现次数',
+  `ratio` DOUBLE DEFAULT 0 COMMENT '占比',
+  `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_stat_id` (`stat_id`),
+  UNIQUE KEY `uk_period_date_emotion` (`stat_period`, `stat_date`, `emotion`),
+  KEY `idx_stat_date` (`stat_date`),
+  KEY `idx_emotion` (`emotion`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='情感分布统计表';
+
+-- ========================================
+-- 14. 公益贡献排行榜 (hm_welfare_ranking) - 数据聚合服务
+-- ========================================
+DROP TABLE IF EXISTS `hm_welfare_ranking`;
+CREATE TABLE `hm_welfare_ranking` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `stat_id` VARCHAR(64) NOT NULL COMMENT '统计唯一标识',
+  `stat_period` VARCHAR(16) NOT NULL COMMENT '统计周期（day:日 week:周 month:月 all:总榜）',
+  `stat_date` DATE NOT NULL COMMENT '统计日期',
+  `year` INT(11) DEFAULT NULL COMMENT '年份',
+  `month` INT(11) DEFAULT NULL COMMENT '月份',
+  `week` INT(11) DEFAULT NULL COMMENT '周数',
+  `user_id` VARCHAR(64) NOT NULL COMMENT '用户ID',
+  `nick_name` VARCHAR(64) DEFAULT NULL COMMENT '用户昵称',
+  `avatar_url` VARCHAR(500) DEFAULT NULL COMMENT '头像URL',
+  `hug_count` INT(11) DEFAULT 0 COMMENT '拥抱次数',
+  `total_contribution` DECIMAL(15,4) DEFAULT 0.0000 COMMENT '总贡献值',
+  `ranking` INT(11) DEFAULT 0 COMMENT '排名',
+  `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_stat_id` (`stat_id`),
+  UNIQUE KEY `uk_period_date_user` (`stat_period`, `stat_date`, `user_id`),
+  KEY `idx_stat_date` (`stat_date`),
+  KEY `idx_ranking` (`ranking`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='公益贡献排行榜';
+
+-- ========================================
+-- 15. 用户活跃留存统计表 (hm_user_retention_stats) - 数据聚合服务
+-- ========================================
+DROP TABLE IF EXISTS `hm_user_retention_stats`;
+CREATE TABLE `hm_user_retention_stats` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `stat_id` VARCHAR(64) NOT NULL COMMENT '统计唯一标识',
+  `stat_date` DATE NOT NULL COMMENT '统计日期（新增用户日期）',
+  `day1` INT(11) DEFAULT 0 COMMENT '次日留存数',
+  `day3` INT(11) DEFAULT 0 COMMENT '3日留存数',
+  `day7` INT(11) DEFAULT 0 COMMENT '7日留存数',
+  `day14` INT(11) DEFAULT 0 COMMENT '14日留存数',
+  `day30` INT(11) DEFAULT 0 COMMENT '30日留存数',
+  `new_user_count` INT(11) DEFAULT 0 COMMENT '当日新增用户数',
+  `active_user_count` INT(11) DEFAULT 0 COMMENT '当日活跃用户数',
+  `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_stat_id` (`stat_id`),
+  UNIQUE KEY `uk_stat_date` (`stat_date`),
+  KEY `idx_stat_date` (`stat_date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户活跃留存统计表';
+
+-- ========================================
 -- 执行完毕
 -- ========================================

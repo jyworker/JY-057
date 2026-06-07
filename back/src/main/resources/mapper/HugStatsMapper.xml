@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hugmom.back.mapper.HugStatsMapper">
+
+    <resultMap id="BaseResultMap" type="com.hugmom.back.entity.HugStats">
+        <id column="id" property="id"/>
+        <result column="stat_id" property="statId"/>
+        <result column="stat_period" property="statPeriod"/>
+        <result column="stat_type" property="statType"/>
+        <result column="stat_date" property="statDate"/>
+        <result column="year" property="year"/>
+        <result column="month" property="month"/>
+        <result column="week" property="week"/>
+        <result column="hug_count" property="hugCount"/>
+        <result column="user_count" property="userCount"/>
+        <result column="member_count" property="memberCount"/>
+        <result column="total_duration" property="totalDuration"/>
+        <result column="avg_duration" property="avgDuration"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, stat_id, stat_period, stat_type, stat_date, year, month, week,
+        hug_count, user_count, member_count, total_duration, avg_duration,
+        create_time, update_time
+    </sql>
+
+    <insert id="insert" parameterType="com.hugmom.back.entity.HugStats">
+        INSERT INTO hm_hug_stats (
+            stat_id, stat_period, stat_type, stat_date, year, month, week,
+            hug_count, user_count, member_count, total_duration, avg_duration,
+            create_time, update_time
+        ) VALUES (
+            #{statId}, #{statPeriod}, #{statType}, #{statDate}, #{year}, #{month}, #{week},
+            #{hugCount}, #{userCount}, #{memberCount}, #{totalDuration}, #{avgDuration},
+            NOW(), NOW()
+        )
+    </insert>
+
+    <update id="update" parameterType="com.hugmom.back.entity.HugStats">
+        UPDATE hm_hug_stats
+        SET hug_count = #{hugCount},
+            user_count = #{userCount},
+            member_count = #{memberCount},
+            total_duration = #{totalDuration},
+            avg_duration = #{avgDuration},
+            update_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <select id="selectByPeriodTypeDate" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM hm_hug_stats
+        WHERE stat_period = #{statPeriod}
+          AND stat_type = #{statType}
+          AND stat_date = #{statDate}
+        LIMIT 1
+    </select>
+
+    <select id="selectByDateRange" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM hm_hug_stats
+        WHERE stat_period = #{statPeriod}
+          AND stat_type = #{statType}
+          AND stat_date &gt;= #{startDate}
+          AND stat_date &lt;= #{endDate}
+        ORDER BY stat_date ASC
+    </select>
+
+    <select id="aggregateHugStatsByDay" resultType="java.util.HashMap">
+        SELECT
+            DATE(timestamp) AS stat_date,
+            COUNT(*) AS hug_count,
+            COUNT(DISTINCT user_id) AS user_count,
+            COUNT(DISTINCT member_id) AS member_count,
+            IFNULL(SUM(duration), 0) AS total_duration,
+            IFNULL(AVG(duration), 0) AS avg_duration
+        FROM hm_hug_record
+        WHERE timestamp &gt;= #{startDate}
+          AND timestamp &lt; DATE_ADD(#{endDate}, INTERVAL 1 DAY)
+        GROUP BY DATE(timestamp)
+        ORDER BY stat_date ASC
+    </select>
+
+    <select id="aggregateHugStatsByWeek" resultType="java.util.HashMap">
+        SELECT
+            YEAR(timestamp) AS year,
+            WEEK(timestamp, 3) AS week,
+            DATE(DATE_SUB(timestamp, INTERVAL (DAYOFWEEK(timestamp) - 2) DAY)) AS stat_date,
+            COUNT(*) AS hug_count,
+            COUNT(DISTINCT user_id) AS user_count,
+            COUNT(DISTINCT member_id) AS member_count,
+            IFNULL(SUM(duration), 0) AS total_duration,
+            IFNULL(AVG(duration), 0) AS avg_duration
+        FROM hm_hug_record
+        WHERE timestamp &gt;= #{startDate}
+          AND timestamp &lt; DATE_ADD(#{endDate}, INTERVAL 1 DAY)
+        GROUP BY YEAR(timestamp), WEEK(timestamp, 3)
+        ORDER BY stat_date ASC
+    </select>
+
+    <select id="aggregateHugStatsByMonth" resultType="java.util.HashMap">
+        SELECT
+            YEAR(timestamp) AS year,
+            MONTH(timestamp) AS month,
+            DATE(DATE_FORMAT(timestamp, '%Y-%m-01')) AS stat_date,
+            COUNT(*) AS hug_count,
+            COUNT(DISTINCT user_id) AS user_count,
+            COUNT(DISTINCT member_id) AS member_count,
+            IFNULL(SUM(duration), 0) AS total_duration,
+            IFNULL(AVG(duration), 0) AS avg_duration
+        FROM hm_hug_record
+        WHERE timestamp &gt;= #{startDate}
+          AND timestamp &lt; DATE_ADD(#{endDate}, INTERVAL 1 DAY)
+        GROUP BY YEAR(timestamp), MONTH(timestamp)
+        ORDER BY stat_date ASC
+    </select>
+
+    <delete id="deleteByPeriodTypeDate">
+        DELETE FROM hm_hug_stats
+        WHERE stat_period = #{statPeriod}
+          AND stat_type = #{statType}
+          AND stat_date = #{statDate}
+    </delete>
+
+</mapper>
